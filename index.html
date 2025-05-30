@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Pedido de Produtos</title>
+    <link rel="stylesheet" href="formulario.css">
+</head>
+<body>
+    <form class="pedido-form" id="pedidoForm">
+        <h2>Pedido de Produtos</h2>
+        <label for="categoria">Categoria:</label>
+        <select id="categoria" name="categoria" required>
+            <option value="">Selecione uma Família</option>
+            <option value="f1">Julie e Marie</option>
+            <option value="f2">Alice e Marcele</option>
+            <option value="f3">Eric e Caleb</option>
+        </select>
+
+        <div class="produtos-lista">
+            <div class="produto">
+                <input type="checkbox" id="refri" name="produto[]" value="refrigerante" data-preco="15.00">
+                <label for="refri" class="nome-produto">Pizza 4 Queijos</label>
+                <span class="valor-produto">R$ 15,00</span>
+                <input type="number" min="1" max="10" value="1" name="qtd_refrigerante" class="qtd-produto" disabled>
+            </div>
+            <div class="produto">
+                <input type="checkbox" id="sanduiche" name="produto[]" value="sanduiche" data-preco="15.00">
+                <label for="sanduiche" class="nome-produto">Pizza Marguerita</label>
+                <span class="valor-produto">R$ 15,00</span>
+                <input type="number" min="1" max="10" value="1" name="qtd_sanduiche" class="qtd-produto" disabled>
+            </div>
+            <div class="produto">
+                <input type="checkbox" id="chocolate" name="produto[]" value="chocolate" data-preco="20.00">
+                <label for="chocolate" class="nome-produto">Pizza Chocolate</label>
+                <span class="valor-produto">R$ 20,00</span>
+                <input type="number" min="1" max="10" value="1" name="qtd_chocolate" class="qtd-produto" disabled>
+            </div>
+        </div>
+
+        <div class="valor-total">
+            Total: <span id="totalPedido">R$ 0,00</span>
+        </div>
+
+        <button type="submit" class="btn-enviar" id="enviar">Enviar Pedido</button>
+    </form>
+    <script>
+        function atualizaTotal() {
+            let total = 0;
+            document.querySelectorAll('.produto').forEach(function(produto) {
+                const checkbox = produto.querySelector('input[type="checkbox"]');
+                const qtdInput = produto.querySelector('.qtd-produto');
+                const preco = parseFloat(checkbox.getAttribute('data-preco'));
+                if(checkbox.checked) {
+                    const qtd = parseInt(qtdInput.value) || 1;
+                    total += preco * qtd;
+                }
+            });
+            document.getElementById('totalPedido').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+        }
+
+        document.querySelectorAll('.produto input[type="checkbox"]').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const qtdInput = this.parentNode.querySelector('.qtd-produto');
+                qtdInput.disabled = !this.checked;
+                if (!this.checked) qtdInput.value = 1;
+                atualizaTotal();
+            });
+        });
+
+        document.querySelectorAll('.produto .qtd-produto').forEach(function(input) {
+            input.addEventListener('input', function() {
+                if(this.value < 1) this.value = 1;
+                atualizaTotal();
+            });
+        });
+
+        // Atualiza o total ao carregar (caso algum item venha pré-selecionado)
+        atualizaTotal();
+
+        // Exemplo de manipulação do envio (pode ser ajustado para uso real)
+        document.getElementById('pedidoForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            alert('Pedido enviado!');
+        });
+		
+		const botao = document.getElementById('enviar');
+		botao.addEventListener('click', function() {
+		    let URL_1 = 'https://www.asaas.com/c/u9m5fxny3hbpjooy';
+			let URL_2 = 'https://www.asaas.com/c/z2s9fa8t58v3i7xq';
+			let URL_3 = 'https://www.asaas.com/c/xqh3q7523539ynge';
+			const selectElement = document.getElementById('categoria');
+			const selectedValue = selectElement.value;
+
+			switch(selectedValue) {
+				case "f1":
+					botao.href = URL_1;
+					break;
+				case "f2":
+					botao.href = URL_2;
+					break;
+				case "f3":
+					botao.href = URL_3;
+					break;
+			}
+			
+			window.location.href = botao.href; // Redireciona para o URL
+		});
+    </script>
+</body>
+</html>
